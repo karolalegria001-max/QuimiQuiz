@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>💜 Quiz de Química Cute 🧪</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="cajaTitulo">
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #f3e5f5, #e1bee7, #ede7f6);
+      text-align: center;
+      color: #4a148c;
+      padding: 40px;
+    }
+
+    h1 {
+      font-size: 2.6em;
+      color: #7b1fa2;
+      text-shadow: 0 0 10px rgba(155, 89, 182, 0.4);
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-6px); }
+      100% { transform: translateY(0px); }
+    }
+
+    .quiz-box {
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 25px;
+      padding: 30px;
+      margin: 30px auto;
+      width: 70%;
+      box-shadow: 0 0 25px rgba(155, 89, 182, 0.3);
+      text-align: left;
+    }
+
+    .pregunta {
+      font-size: 18px;
+      font-weight: 600;
+      color: #6a1b9a;
+    }
+
+    input[type="text"] {
+      width: 95%;
+      padding: 10px;
+      border-radius: 10px;
+      border: 2px solid #ce93d8;
+      font-size: 16px;
+      background-color: #f8f1fa;
+    }
+
+    input[type="text"]:focus {
+      outline: none;
+      border-color: #ab47bc;
+      box-shadow: 0 0 10px #ce93d8;
+      background-color: #fff0ff;
+    }
+
+    label {
+      display: block;
+      margin: 6px 0;
+      color: #4a148c;
+      cursor: pointer;
+      padding: 5px 10px;
+      border-radius: 10px;
+      transition: 0.3s;
+    }
+
+    label:hover {
+      background-color: #f3e5f5;
+    }
+
+    button {
+      background: linear-gradient(135deg, #ba68c8, #9c27b0);
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 20px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+      margin-top: 10px;
+      box-shadow: 0 0 15px rgba(155, 89, 182, 0.4);
+    }
+
+    button:hover {
+      transform: scale(1.05);
+      background: linear-gradient(135deg, #ab47bc, #8e24aa);
+    }
+
+    .vidas {
+      text-align: right;
+      color: #8e24aa;
+      font-weight: 600;
+      font-size: 1.1em;
+    }
+
+    #resultado {
+      font-size: 1.4em;
+      margin-top: 20px;
+      font-weight: bold;
+      color: #4a148c;
+    }
+
+    footer {
+      margin-top: 40px;
+      font-size: 0.95em;
+      color: #6a1b9a;
+      font-weight: 600;
+      text-shadow: 0 0 8px rgba(186,104,200,0.3);
+    }
+  </style>
+</head>
+<body>
+  <h1>💜 Quiz de Química 🧪</h1>
+
+  <div class="quiz-box" id="quizBox">
+    <p>Presiona “Comenzar” para iniciar tu quiz de elementos ✨</p>
+    <button onclick="iniciarQuiz()">💫 Comenzar 💫</button>
+  </div>
+
+  <h2 id="resultado"></h2>
+
+  <footer>✨ Página creada por <b>Santany Alegría</b> e <b>Isis Marroquín</b> 💜</footer>
+
+  <script>
+    const elementos = [
+      { nombre: "Hidrógeno", tipo: "No metal", oxidacion: "+1", atomico: 1 },
+      { nombre: "Oxígeno", tipo: "No metal", oxidacion: "-2", atomico: 8 },
+      { nombre: "Sodio", tipo: "Metal alcalino", oxidacion: "+1", atomico: 11 },
+      { nombre: "Hierro", tipo: "Metal de transición", oxidacion: "+2, +3", atomico: 26 },
+      { nombre: "Carbono", tipo: "No metal", oxidacion: "+2, +4", atomico: 6 },
+      { nombre: "Fósforo", tipo: "No metal", oxidacion: "+3, +5", atomico: 15 },
+      { nombre: "Zinc", tipo: "Metal de transición", oxidacion: "+2", atomico: 30 },
+      { nombre: "Silicio", tipo: "Metaloide", oxidacion: "+4", atomico: 14 }
+    ];
+
+    let preguntas = [];
+    let puntaje = 0;
+    let actual = 0;
+    let intentos = 2;
+
+    function iniciarQuiz() {
+      puntaje = 0;
+      actual = 0;
+      preguntas = generarPreguntas();
+      mostrarPregunta();
+    }
+
+    function mezclar(arr) {
+      return arr.sort(() => Math.random() - 0.5);
+    }
+
+    function generarPreguntas() {
+      const seleccionados = mezclar([...elementos]).slice(0, 5);
+      const resultado = [];
+
+      seleccionados.forEach(e => {
+        const tipo = Math.floor(Math.random() * 3) + 1;
+
+        let texto = "", correcta = "", opciones = [];
+
+        if (tipo === 1) {
+          texto = `¿Qué tipo de elemento es ${e.nombre}?`;
+          correcta = e.tipo;
+        } 
+        else if (tipo === 2) {
+          texto = `¿Cuál es el número de oxidación de ${e.nombre}?`;
+          correcta = e.oxidacion;
+
+          opciones = ["+1","-1","+2","+3","+4","-2","+5", e.oxidacion];
+          opciones = mezclar(opciones).slice(0, 4);
+
+          if (!opciones.includes(correcta)) {
+            opciones[Math.floor(Math.random() * 4)] = correcta;
+          }
+        } 
+        else {
+          texto = `¿Cuál es el número atómico de ${e.nombre}?`;
+          correcta = e.atomico.toString();
+        }
+
+        resultado.push({ ...e, pregunta: texto, correcta, tipo, opciones });
+      });
+
+      return resultado;
+    }
+
+    function mostrarPregunta() {
+      const quizBox = document.getElementById("quizBox");
+
+      if (actual >= preguntas.length) {
+        quizBox.innerHTML = `
+          <h3>🌸 Quiz terminado 🌸</h3>
+          <p>Tu puntaje final es <b>${puntaje}</b> de 5</p>
+          <p>Porcentaje: <b>${Math.round((puntaje / 5) * 100)}%</b></p>
+          <button onclick="iniciarQuiz()">💜 Volver a jugar 💜</button>`;
+        return;
+      }
+
+      const p = preguntas[actual];
+      intentos = 2;
+
+      let contenido = `
+        <div class="vidas">💜 Intentos: ${"💜".repeat(intentos)}</div>
+        <div class="pregunta">Pregunta ${actual + 1} de 5</div>
+        <p>${p.pregunta}</p>
+      `;
+
+      if (p.tipo === 2) {
+        const letras = ["A", "B", "C", "D"];
+        p.opciones.forEach((opt, i) => {
+          contenido += `
+            <label>
+              <input type="radio" name="opcion" value="${opt}">
+              ${letras[i]}. ${opt}
+            </label>`;
+        });
+
+      } else {
+        contenido += `<input type="text" id="respuesta" placeholder="Escribe tu respuesta aquí ✨">`;
+      }
+
+      contenido += `<br><button onclick="verificar()">Responder 💫</button>`;
+      quizBox.innerHTML = contenido;
+    }
+
+    function verificar() {
+      const p = preguntas[actual];
+      let respuesta = "";
+
+      if (p.tipo === 2) {
+        const sel = document.querySelector('input[name="opcion"]:checked');
+        respuesta = sel ? sel.value.toLowerCase() : "";
+      } else {
+        respuesta = document.getElementById("respuesta").value.trim().toLowerCase();
+      }
+
+      const correcta = p.correcta.toString().toLowerCase();
+
+      if (respuesta === correcta) {
+        alert("✨ ¡Correcto! ✨");
+        puntaje++;
+        actual++;
+        mostrarPregunta();
+      } else {
+        intentos--;
+        if (intentos > 0) {
+          alert("❌ Incorrecto. Te queda " + intentos + " intento 💜");
+        } else {
+          alert("❌ Incorrecto. La respuesta era: " + p.correcta);
+          actual++;
+          mostrarPregunta();
+        }
+      }
+    }
+  </script>
+</body>
+</html>
