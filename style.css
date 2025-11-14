@@ -1,5 +1,5 @@
 .cajaTitulo{
-    color:blueviolet(253,119,2);
+    color:blueviolet(249,115,2);
     font-family: poppins;
     font-size: 30px;
     background-image: url(quimica.jpeg);
@@ -8,7 +8,8 @@
     background-size: cover;
     background-position: center;
     padding: 20%;
-    border: 2px solid black;
+    border: 1px solid black;
     text-align: center;
 
 }
+
